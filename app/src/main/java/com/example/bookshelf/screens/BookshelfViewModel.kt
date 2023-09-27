@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface BookUiState {
-    data class Success(val book: Bookshelf) : BookUiState
+    data class Success(val bookShelf: Bookshelf) : BookUiState
     object Loading : BookUiState
     object Error : BookUiState
 }
@@ -29,7 +29,7 @@ class BookshelfViewModel: ViewModel() {
         viewModelScope.launch {
             bookshelfUiState = try {
                 val books = BookshelfApi.retrofitService.getBooks()
-                BookUiState.Success(book = books)
+                BookUiState.Success(bookShelf = books)
 
             } catch (e: IOException) {
                 BookUiState.Error
