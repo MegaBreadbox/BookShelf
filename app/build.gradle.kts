@@ -51,6 +51,9 @@ android {
 }
 
 dependencies {
+    //Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
 
