@@ -1,35 +1,67 @@
 package com.example.bookshelf.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.example.bookshelf.network.BookModel
 import com.example.bookshelf.network.Bookshelf
 
 @Composable
 fun BookShelfApp(
-    bookshelfViewModel: BookshelfViewModel = viewModel(),
+    bookshelfViewModel: BookshelfViewModel,
     modifier: Modifier = Modifier
 ){
     when(val bookUiState = bookshelfViewModel.bookshelfUiState) {
-        is BookUiState.Success -> BookShelfCard(bookUiState.bookShelf, {})
+        is BookUiState.Success -> BookshelfGrid(bookUiState.bookShelf, {})
         is BookUiState.Loading -> Text(text = "Loading")
         is BookUiState.Error -> Text(text = "Error")
+    }
+}
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun BookshelfGrid(
+    bookshelf: Bookshelf,
+    onClick: () -> Unit
+) {
+    val bookArray = bookshelf.items
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Adaptive(minSize = 150.dp),
+        verticalItemSpacing = 4.dp,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+
+    ) {
+        items(bookArray) {entry -> entry
+            BookShelfCard(
+                entry, onClick
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookShelfCard(
-    bookshelf: Bookshelf,
+    bookModel: BookModel,
     onClick : () -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -38,12 +70,13 @@ fun BookShelfCard(
     ){
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
-                .data(bookshelf.items[0].volumeInfo.imageLinks.thumbnail
+                .data(bookModel.volumeInfo.imageLinks.thumbnail
                     .replace("http","https")
                 )
                 .build(),
             contentDescription = null,
-            modifier = modifier.fillMaxWidth()
+            contentScale = ContentScale.Crop,
+            modifier = modifier.fillMaxSize()
         )
     }
 

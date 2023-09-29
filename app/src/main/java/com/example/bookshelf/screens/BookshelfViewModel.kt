@@ -12,7 +12,10 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 sealed interface BookUiState {
-    data class Success(val bookShelf: Bookshelf) : BookUiState
+    data class Success(
+        val bookShelf: Bookshelf,
+        var textInput: String = "",
+    ) : BookUiState
     object Loading : BookUiState
     object Error : BookUiState
 }
@@ -23,6 +26,10 @@ class BookshelfViewModel: ViewModel() {
 
     init {
         getBooks()
+    }
+
+    fun updateTextField(input: String) {
+        BookUiState.Success(textInput = input)
     }
 
     private fun getBooks() {
