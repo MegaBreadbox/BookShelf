@@ -10,6 +10,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.bookshelf.viewmodels.BookshelfViewModel
+import com.example.bookshelf.viewmodels.TextInputViewModel
 
 enum class BookshelfScreen() {
     Search,
@@ -22,6 +24,7 @@ enum class BookshelfScreen() {
 fun BookshelfMenu(
     navController: NavHostController = rememberNavController(),
     bookshelfViewModel: BookshelfViewModel = viewModel(),
+    inputViewModel: TextInputViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     Scaffold(){
@@ -32,7 +35,8 @@ fun BookshelfMenu(
 
         ){
             composable(BookshelfScreen.Search.name) {
-                SearchScreen(bookshelfViewModel = bookshelfViewModel)
+                SearchScreen(inputViewModel = inputViewModel,
+                    onKeyboardSearch = { navController.navigate(BookshelfScreen.Bookshelf.name) })
             }
             composable(BookshelfScreen.Bookshelf.name) {
                 BookShelfApp(bookshelfViewModel = bookshelfViewModel)

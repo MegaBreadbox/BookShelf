@@ -1,11 +1,10 @@
-package com.example.bookshelf.screens
+package com.example.bookshelf.viewmodels
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bookshelf.network.BookModel
 import com.example.bookshelf.network.Bookshelf
 import com.example.bookshelf.network.BookshelfApi
 import kotlinx.coroutines.launch
@@ -28,9 +27,6 @@ class BookshelfViewModel: ViewModel() {
         getBooks()
     }
 
-    fun updateTextField(input: String) {
-        BookUiState.Success(textInput = input)
-    }
 
     private fun getBooks() {
         viewModelScope.launch {
