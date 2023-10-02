@@ -36,7 +36,11 @@ fun BookshelfMenu(
         ){
             composable(BookshelfScreen.Search.name) {
                 SearchScreen(inputViewModel = inputViewModel,
-                    onKeyboardSearch = { navController.navigate(BookshelfScreen.Bookshelf.name) })
+                    onKeyboardSearch = {
+                        navController.navigate(BookshelfScreen.Bookshelf.name)
+                        bookshelfViewModel.getBooks(inputViewModel.inputUiState)
+                    }
+                )
             }
             composable(BookshelfScreen.Bookshelf.name) {
                 BookShelfApp(bookshelfViewModel = bookshelfViewModel)

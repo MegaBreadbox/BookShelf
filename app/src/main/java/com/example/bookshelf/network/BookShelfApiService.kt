@@ -6,6 +6,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.internal.ignoreIoExceptions
 import retrofit2.Retrofit
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 private val customJson = Json {
     ignoreUnknownKeys = true
@@ -21,8 +22,10 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface BookShelfApiService {
-    @GET("books/v1/volumes?q=history")
-    suspend fun getBooks(): Bookshelf
+    @GET("books/v1/volumes")
+    suspend fun getBooks(
+        @Query("q") q : String
+    ): Bookshelf
 }
 
 

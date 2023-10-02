@@ -13,5 +13,6 @@ class TextInputViewModel : ViewModel() {
     fun changeInput(input: String) {
         inputUiState = input
     }
+
 }
 

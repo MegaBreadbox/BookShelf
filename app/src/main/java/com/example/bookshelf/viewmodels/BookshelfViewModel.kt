@@ -13,7 +13,6 @@ import java.io.IOException
 sealed interface BookUiState {
     data class Success(
         val bookShelf: Bookshelf,
-        var textInput: String = "",
     ) : BookUiState
     object Loading : BookUiState
     object Error : BookUiState
@@ -23,15 +22,11 @@ class BookshelfViewModel: ViewModel() {
     var bookshelfUiState : BookUiState by mutableStateOf(BookUiState.Loading)
         private set
 
-    init {
-        getBooks()
-    }
 
-
-    private fun getBooks() {
+    fun getBooks(input: String) {
         viewModelScope.launch {
             bookshelfUiState = try {
-                val books = BookshelfApi.retrofitService.getBooks()
+                val books = BookshelfApi.retrofitService.getBooks(input)
                 BookUiState.Success(bookShelf = books)
 
             } catch (e: IOException) {
