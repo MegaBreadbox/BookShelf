@@ -14,23 +14,23 @@ data class BookModel(
     val id : String,
     val etag : String,
     val selfLink : String,
-    val volumeInfo : VolumeInfo
+    val volumeInfo : VolumeInfo?
 )
 
 @Serializable
 data class VolumeInfo(
-    val title : String,
+    val title : String?,
     val subtitle : String?,
-    val authors : Array<String>,
+    val authors : Array<String>?,
     val publisher : String?,
-    val publishedDate : String,
+    val publishedDate : String?,
     val description : String?,
-    val imageLinks : ImageLinks
+    val imageLinks : ImageLinks?
 )
 
 @Serializable
 data class ImageLinks(
-    val smallThumbnail : String,
-    val thumbnail: String
+    val smallThumbnail : String?,
+    val thumbnail: String?
 )
 

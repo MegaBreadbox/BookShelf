@@ -2,17 +2,23 @@ package com.example.bookshelf.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -25,11 +31,12 @@ import com.example.bookshelf.viewmodels.BookshelfViewModel
 @Composable
 fun BookShelfApp(
     bookshelfViewModel: BookshelfViewModel,
+    onClick: (BookModel) -> Unit,
     modifier: Modifier = Modifier
 ){
     when(val bookUiState = bookshelfViewModel.bookshelfUiState) {
-        is BookUiState.Success -> BookshelfGrid(bookUiState.bookShelf, {})
-        is BookUiState.Loading -> Text(text = "Loading")
+        is BookUiState.Success -> BookshelfGrid(bookUiState.bookShelf, onClick)
+        is BookUiState.Loading -> LoadingScreen()
         is BookUiState.Error -> Text(text = "Error")
     }
 }
@@ -37,7 +44,7 @@ fun BookShelfApp(
 @Composable
 fun BookshelfGrid(
     bookshelf: Bookshelf,
-    onClick: () -> Unit
+    onClick: (BookModel) -> Unit
 ) {
     val bookArray = bookshelf.items
     LazyVerticalStaggeredGrid(
@@ -48,7 +55,7 @@ fun BookshelfGrid(
     ) {
         items(bookArray) {entry -> entry
             BookShelfCard(
-                entry, onClick
+                entry, { onClick(entry) }
             )
         }
     }
@@ -66,8 +73,8 @@ fun BookShelfCard(
     ){
         AsyncImage(
             model = ImageRequest.Builder(context = LocalContext.current)
-                .data(bookModel.volumeInfo.imageLinks.thumbnail
-                    .replace("http","https")
+                .data(bookModel.volumeInfo?.imageLinks?.thumbnail
+                    ?.replace("http","https")
                 )
                 .build(),
             contentDescription = null,
@@ -76,4 +83,19 @@ fun BookShelfCard(
         )
     }
 
+}
+
+@Composable
+fun LoadingScreen(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator(
+            modifier = modifier.size(70.dp)
+        )
+    }
 }
