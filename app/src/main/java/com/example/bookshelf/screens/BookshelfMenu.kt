@@ -10,12 +10,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.bookshelf.R
 import com.example.bookshelf.network.BookModel
 import com.example.bookshelf.viewmodels.BookshelfViewModel
 import com.example.bookshelf.viewmodels.TextInputViewModel
@@ -27,14 +29,16 @@ enum class BookshelfScreen() {
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookshelfTopBar() {
+fun BookshelfTopBar(
+    modifier: Modifier = Modifier
+) {
     TopAppBar(
         title = {
             Text(
-                text ="Bookshelf",
+                text = stringResource(R.string.app_name),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth()
+                modifier = modifier.fillMaxWidth()
             )
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -47,15 +51,12 @@ fun BookshelfTopBar() {
 @Composable
 fun BookshelfMenu(
     navController: NavHostController = rememberNavController(),
-    bookshelfViewModel: BookshelfViewModel = viewModel(),
+    bookshelfViewModel: BookshelfViewModel = viewModel(factory = BookshelfViewModel.Factory),
     inputViewModel: TextInputViewModel = viewModel(),
-    modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            BookshelfTopBar(
-
-            )
+            BookshelfTopBar()
         }
     ){ padding ->
         NavHost(

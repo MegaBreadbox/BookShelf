@@ -20,7 +20,6 @@ import com.example.bookshelf.viewmodels.TextInputViewModel
 fun SearchScreen(
     inputViewModel: TextInputViewModel,
     onKeyboardSearch: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     SearchBar(inputViewModel, onKeyboardSearch)
 }
@@ -48,7 +47,7 @@ fun SearchBar(
                 imeAction = ImeAction.Search
             ),
             keyboardActions = KeyboardActions(
-                onSearch = { onKeyboardSearch() }
+                onSearch = { onKeyboardSearch() },
             )
         )
         Spacer(Modifier.weight(.75F))
